@@ -1,0 +1,129 @@
+{% extends 'orders/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>Create an Order</h2>
+        </div>
+
+        <form action="{% url 'orders:create_order' %}" method="post">
+    {% csrf_token %}
+
+    <!-- Category Dropdown -->
+    <div class="form-group">
+        <label for="category">Select Category</label>
+        <select id="category" class="form-control" required>
+            <option value="" disabled selected>Choose category</option>
+            {% for category in categories %}
+                <option value="{{ category.name }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Subcategory Dropdown -->
+    <div class="form-group" id="subcategory-container" style="display: none;">
+        <label for="subcategory">Select Subcategory</label>
+        <select name="subcategory" id="subcategory" class="form-control" required>
+            <option value="" disabled selected>Choose subcategory</option>
+        </select>
+    </div>
+
+    <!-- Service Dropdown -->
+    <div class="form-group" id="service-container" style="display: none;">
+        <label for="service">Select Service</label>
+        <select name = "service" id="service" class="form-control" required>
+            <option value="" disabled selected>Choose service</option>
+        </select>
+    </div>
+
+    <div id="price-desc-container" style="display: none;">
+        <div class="form-group">
+            <label for="{{ form.price.id_for_label }}">Proposed Price</label>
+{#            <input type="number" id="price" class="form-control" placeholder="Enter price" required>#}
+            {{ form.price }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.description.id_for_label }}">Order Description</label>
+{#            <textarea id="description" class="form-control" rows="4" placeholder="Describe your order" required></textarea>#}
+            {{ form.description }}
+        </div>
+    </div>
+
+    <div class="btn-box">
+        <button type="submit" class="btn btn-primary">Submit Order</button>
+    </div>
+</form>
+
+    </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let categoryDropdown = document.getElementById("category");
+    let subcategoryDropdown = document.getElementById("subcategory");
+    let serviceDropdown = document.getElementById("service");
+    let subcategoryContainer = document.getElementById("subcategory-container");
+    let serviceContainer = document.getElementById("service-container");
+    let priceDescContainer = document.getElementById("price-desc-container");
+
+    // Fetch subcategories when category is selected
+    categoryDropdown.addEventListener("change", function () {
+        let selectedCategory = categoryDropdown.value;
+        subcategoryDropdown.innerHTML = '<option value="" disabled selected>Choose subcategory</option>';
+        serviceDropdown.innerHTML = '<option value="" disabled selected>Choose service</option>';
+        serviceContainer.style.display = "none";
+        priceDescContainer.style.display = "none";
+
+        if (selectedCategory) {
+            fetch(`/get-subcategories/?category=${selectedCategory}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.subcategories.length > 0) {
+                        subcategoryContainer.style.display = "block";
+                        data.subcategories.forEach(sub => {
+                            let opt = document.createElement("option");
+                            opt.value = sub;
+                            opt.textContent = sub;
+                            subcategoryDropdown.appendChild(opt);
+                        });
+                    } else {
+                        subcategoryContainer.style.display = "none";
+                    }
+                });
+        }
+    });
+
+    // Fetch services when subcategory is selected
+    subcategoryDropdown.addEventListener("change", function () {
+        let selectedSubcategory = subcategoryDropdown.value;
+        serviceDropdown.innerHTML = '<option value="" disabled selected>Choose service</option>';
+        priceDescContainer.style.display = "none";
+
+        if (selectedSubcategory) {
+            fetch(`/get-services/?subcategory=${selectedSubcategory}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.services.length > 0) {
+                        serviceContainer.style.display = "block";
+                        data.services.forEach(service => {
+                            let opt = document.createElement("option");
+                            opt.value = service;
+                            opt.textContent = service;
+                            serviceDropdown.appendChild(opt);
+                        });
+                    } else {
+                        serviceContainer.style.display = "none";
+                    }
+                });
+        }
+    });
+
+    // Show price & description container when a service is selected
+    serviceDropdown.addEventListener("change", function () {
+        priceDescContainer.style.display = "block";
+    });
+});
+</script>
+
+{% endblock %}
