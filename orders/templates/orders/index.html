@@ -1,65 +1,404 @@
 {% extends 'orders/base.html' %}
 {% load static %}
 
+{% block css %}
+<style>
+  .hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("{% static 'vendor/images/hero-bg.jpeg' %}");
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 100px 0;
+    margin-bottom: 50px;
+  }
+
+  .hero-content {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .hero-description {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+  }
+
+  .cta-button {
+    display: inline-block;
+    background-color: #ff6f00;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+
+  .cta-button:hover {
+    background-color: #ff4500;
+    color: white;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 40px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .feature-box {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 30px 20px;
+    border-radius: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .feature-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .feature-icon {
+    font-size: 3rem;
+    color: #ff6f00;
+    margin-bottom: 20px;
+  }
+
+  .feature-title {
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  .how-it-works-step {
+    display: flex;
+    margin-bottom: 30px;
+    align-items: center;
+  }
+
+  .step-number {
+    width: 50px;
+    height: 50px;
+    background-color: #ff6f00;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-right: 20px;
+    flex-shrink: 0;
+  }
+
+  .testimonial-box {
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+  }
+
+  .testimonial-text {
+    font-style: italic;
+    margin-bottom: 20px;
+  }
+
+  .testimonial-author {
+    font-weight: bold;
+  }
+
+  .equipment-type {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .equipment-icon {
+    font-size: 3rem;
+    color: #ff6f00;
+    margin-bottom: 15px;
+  }
+
+  .banner-section {
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("{% static 'vendor/images/hero-bg.jpeg' %}");
+    {#background-color: #ff6f00;#}
+    color: white;
+    padding: 50px 0;
+    text-align: center;
+    margin: 50px 0;
+  }
+
+  .banner-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  .section-padding {
+    padding: 70px 0;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-    <div class="container ">
-      <div class="heading_container heading_center">
-        <h2> Our Services </h2>
-      </div>
-      <div class="row">
-        <div class="col-sm-6 col-md-4 mx-auto">
-          <div class="box ">
-            <div class="img-box">
-              <img src="../../../static/vendor/images/s1.png" alt="" />
-            </div>
-            <div class="detail-box">
-              <h5>
-                Maintenance
-              </h5>
-              <p>
-                when looking at its layout. The point of using Lorem Ipsum is
-                that it has a more-or-less normal
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-4 mx-auto">
-          <div class="box ">
-            <div class="img-box">
-              <img src="../../../static/vendor/images/s2.png" alt="" />
-            </div>
-            <div class="detail-box">
-              <h5>
-                Electrical
-              </h5>
-              <p>
-                when looking at its layout. The point of using Lorem Ipsum is
-                that it has a more-or-less normal
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-4 mx-auto">
-          <div class="box ">
-            <div class="img-box">
-              <img src="../../../static/vendor/images/s3.png" alt="" />
-            </div>
-            <div class="detail-box">
-              <h5>
-                Plumbing
-              </h5>
-              <p>
-                when looking at its layout. The point of using Lorem Ipsum is
-                that it has a more-or-less normal
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="btn-box">
-        <a href="">
-          View More
-        </a>
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">GoPytak - Спецтехника на ваших условиях</h1>
+      <p class="hero-description">Находите специализированную технику для строительства и других работ быстро и удобно, или сдавайте свою технику в аренду и получайте заказы</p>
+      <div class="d-flex justify-content-center">
+        <a href="{% url 'orders:create_order' %}" class="cta-button mr-3">Разместить заказ</a>
+        <a href="{% url 'users:login' %}" class="cta-button ml-3">Зарегистрировать технику</a>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="section-padding">
+  <div class="container">
+    <h2 class="section-title">Преимущества GoPytak</h2>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon">
+            <i class="fa fa-bolt"></i>
+          </div>
+          <h4 class="feature-title">Быстрый поиск</h4>
+          <p>Находите подходящую технику для ваших проектов за считанные минуты, а не дни.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon">
+            <i class="fa fa-check-circle"></i>
+          </div>
+          <h4 class="feature-title">Проверенные исполнители</h4>
+          <p>Все исполнители проходят проверку документов и имеют рейтинг от клиентов.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon">
+            <i class="fa fa-calculator"></i>
+          </div>
+          <h4 class="feature-title">Автоматизация налогов</h4>
+          <p>Не беспокойтесь о налогах и отчетности - мы автоматизируем эти процессы для всех исполнителей.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Equipment Types Section -->
+<section class="section-padding" style="background-color: #f9f9f9;">
+  <div class="container">
+    <h2 class="section-title">Виды доступной техники</h2>
+    <div class="row">
+      <div class="col-md-3 col-6">
+        <div class="equipment-type">
+          <div class="equipment-icon">
+            <i class="fa fa-truck"></i>
+          </div>
+          <h5>Самосвалы</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="equipment-type">
+          <div class="equipment-icon">
+            <i class="fa fa-cogs"></i>
+          </div>
+          <h5>Тракторы</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="equipment-type">
+          <div class="equipment-icon">
+            <i class="fa fa-wrench"></i>
+          </div>
+          <h5>Экскаваторы</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="equipment-type">
+          <div class="equipment-icon">
+            <i class="fa fa-arrows-alt"></i>
+          </div>
+          <h5>Погрузчики</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="equipment-type">
+          <div class="equipment-icon">
+            <i class="fa fa-industry"></i>
+          </div>
+          <h5>Бульдозеры</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="equipment-type">
+          <div class="equipment-icon">
+            <i class="fa fa-road"></i>
+          </div>
+          <h5>Катки</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="equipment-type">
+          <div class="equipment-icon">
+            <i class="fa fa-building"></i>
+          </div>
+          <h5>Краны</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="equipment-type">
+          <div class="equipment-icon">
+            <i class="fa fa-plus-circle"></i>
+          </div>
+          <h5>И многое другое</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="section-padding">
+  <div class="container">
+    <h2 class="section-title">Как это работает</h2>
+    <div class="row">
+      <div class="col-md-6">
+        <h3 class="mb-4">Для заказчиков:</h3>
+        <div class="how-it-works-step">
+          <div class="step-number">1</div>
+          <div>
+            <h5>Разместите заказ</h5>
+            <p>Укажите тип необходимой техники, местоположение и сроки выполнения работ.</p>
+          </div>
+        </div>
+        <div class="how-it-works-step">
+          <div class="step-number">2</div>
+          <div>
+            <h5>Получите предложения</h5>
+            <p>Исполнители предложат свои услуги и цены, вам останется только выбрать подходящее.</p>
+          </div>
+        </div>
+        <div class="how-it-works-step">
+          <div class="step-number">3</div>
+          <div>
+            <h5>Завершите работу</h5>
+            <p>Оцените работу исполнителя и оставьте отзыв для других клиентов.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h3 class="mb-4">Для исполнителей:</h3>
+        <div class="how-it-works-step">
+          <div class="step-number">1</div>
+          <div>
+            <h5>Зарегистрируйте свою технику</h5>
+            <p>Добавьте информацию о доступной технике и ваших услугах.</p>
+          </div>
+        </div>
+        <div class="how-it-works-step">
+          <div class="step-number">2</div>
+          <div>
+            <h5>Находите заказы</h5>
+            <p>Просматривайте доступные заказы и предлагайте свои услуги.</p>
+          </div>
+        </div>
+        <div class="how-it-works-step">
+          <div class="step-number">3</div>
+          <div>
+            <h5>Получайте оплату</h5>
+            <p>Выполняйте работу и получайте оплату с автоматическим учетом налогов и отчислений.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Banner CTA -->
+<section class="banner-section">
+  <div class="container">
+    <h2 class="banner-title">Начните использовать GoPytak сегодня!</h2>
+    <p class="mb-4">Присоединяйтесь к растущему сообществу заказчиков и владельцев спецтехники</p>
+    <a href="{% url 'orders:create_order' %}" class="cta-button">Разместить заказ</a>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section-padding">
+  <div class="container">
+    <h2 class="section-title">Отзывы наших клиентов</h2>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="testimonial-box">
+          <p class="testimonial-text">"Благодаря GoPytak нашел экскаватор для своей стройки за 2 часа. Раньше на это уходили дни, и цены были выше."</p>
+          <p class="testimonial-author">Александр, строительная компания</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="testimonial-box">
+          <p class="testimonial-text">"Моя техника теперь работает на 30% больше времени. Плюс не нужно думать об оформлении документов и расчете налогов."</p>
+          <p class="testimonial-author">Сергей, владелец самосвала</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="testimonial-box">
+          <p class="testimonial-text">"Нашли технику для срочного проекта за городом. Все оформили онлайн, спецтехника приехала в тот же день."</p>
+          <p class="testimonial-author">Елена, руководитель проекта</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="section-padding" style="background-color: #f9f9f9;">
+  <div class="container">
+    <h2 class="section-title">Часто задаваемые вопросы</h2>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="mb-4">
+          <h5>Как быстро я могу найти технику?</h5>
+          <p>В большинстве случаев подходящие предложения начинают поступать в течение 1-2 часов после размещения заказа.</p>
+        </div>
+        <div class="mb-4">
+          <h5>Какие гарантии предоставляет сервис?</h5>
+          <p>Мы проверяем документы всех исполнителей, отслеживаем выполнение заказов и обеспечиваем защиту платежей.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-4">
+          <h5>Как происходит оплата услуг?</h5>
+          <p>Оплата производится через безопасную систему после выполнения заказа. Исполнители получают средства с учетом автоматического расчета налогов.</p>
+        </div>
+        <div class="mb-4">
+          <h5>Могу ли я зарегистрировать несколько единиц техники?</h5>
+          <p>Да, вы можете добавить неограниченное количество единиц техники в своем личном кабинете.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA Section -->
+<section class="section-padding">
+  <div class="container text-center">
+    <h2 class="section-title">Готовы начать?</h2>
+    <p class="mb-4">Присоединяйтесь к GoPytak и упростите поиск техники для ваших проектов или получение новых заказов</p>
+    <div class="d-flex justify-content-center">
+      <a href="{% url 'orders:create_order' %}" class="cta-button mr-3">Разместить заказ</a>
+      <a href="{% url 'users:login' %}" class="cta-button ml-3">Зарегистрироваться</a>
+    </div>
+  </div>
+</section>
 {% endblock %}

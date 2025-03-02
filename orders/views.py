@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
@@ -25,7 +25,8 @@ class GetServicesView(View):
         services = Service.objects.filter(subcategory__name=subcategory_name).values_list('name', flat=True)
         return JsonResponse({'services': list(services)})
 
-class OrderCreateView(CreateView):
+
+class OrderCreateView(LoginRequiredMixin, CreateView):
     template_name = "orders/order.html"
     form_class = OrderForm
     success_url = reverse_lazy('orders:index')
