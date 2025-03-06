@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -40,7 +41,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "users",
     "orders",
-    "rest_framework"
+    "rest_framework",
+    "django_htmx"
 ]
 
 MIDDLEWARE = [
@@ -51,6 +53,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'django_htmx.middleware.HtmxMiddleware',
 ]
 
 ROOT_URLCONF = "GoPytak.urls"
@@ -72,8 +75,14 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "GoPytak.wsgi.application"
+# WSGI_APPLICATION = "GoPytak.wsgi.application"
+ASGI_APPLICATION = "GoPytak.asgi.application"
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

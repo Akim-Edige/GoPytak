@@ -8,4 +8,5 @@ urlpatterns = [
 
     path('get-subcategories/', orders_views.GetSubcategoriesView.as_view(), name='get_subcategories'),
     path('get-services/', orders_views.GetServicesView.as_view(), name='get_services'),
+    path('bargain/room/<chatroom_name>', orders_views.chat_view, name="chatroom"),
 ]

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 {% load static %}
+{% load django_htmx %}
 <head>
   <!-- Basic -->
   <meta charset="utf-8" />
@@ -335,6 +336,12 @@
   <script src="{% static 'vendor/js/custom.js' %}"></script>
   <script src="{% static 'vendor/fontawesome/fontawesome-icons.js' %}" crossorigin="anonymous"></script>
 
+  <script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
+
+  <script src="https://unpkg.com/htmx.org@2.0.2"></script>
+  <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+  {% django_htmx_script %}
+
   <script>
     document.getElementById('displayDateYear').innerHTML = new Date().getFullYear();
   </script>
@@ -342,5 +349,7 @@
   <form id="logout-form" method="post" action="{% url 'users:logout' %}" style="display: none;">
     {% csrf_token %}
   </form>
+
+    {% block javascript %}{% endblock %}
 </body>
 </html>

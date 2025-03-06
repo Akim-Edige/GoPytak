@@ -1,0 +1,151 @@
+<!-- order_detail.html -->
+{% extends 'orders/base.html' %}
+
+{% block content %}
+<div id="order-details">
+    <h1>Order #{{ order.id }}</h1>
+    <p>Service: {{ order.service.name }}</p>
+    <p>Initial Price: ${{ order.initial_price }}</p>
+    <p>Status: <span id="order-status">{{ order.get_status_display }}</span></p>
+
+    <!-- Offers section -->
+    <div id="offers-section">
+        <h2>Offers</h2>
+        <div id="offers-list">
+            {% for offer in order.offers.all %}
+            <div class="offer" data-offer-id="{{ offer.id }}">
+                <p>Executor: {{ offer.executor.get_full_name }}</p>
+                <p>Price: ${{ offer.price }}</p>
+                {% if user == order.customer and order.status == 'OPEN' %}
+                <button class="accept-offer-btn" data-offer-id="{{ offer.id }}">Accept Offer</button>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if user.is_executor and order.status == 'OPEN' %}
+    <div id="make-offer-section">
+        <h2>Make an Offer</h2>
+        <form id="offer-form">
+            <input type="number" step="0.01" name="price" placeholder="Your price" required>
+            <button type="submit">Submit Offer</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    const orderSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/order/{{ order.id }}/'
+    );
+
+    orderSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+
+        if (data.type === 'status_update') {
+            document.getElementById('order-status').textContent = data.status;
+
+            if (data.status === 'ACCEPTED') {
+                // Disable all interaction buttons
+                const buttons = document.querySelectorAll('button');
+                buttons.forEach(btn => btn.disabled = true);
+
+                // Show acceptance message
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.textContent = 'This order has been accepted!';
+                document.getElementById('order-details').prepend(notification);
+            }
+        } else if (data.type === 'new_offer') {
+            // Add new offer to the list
+            const offersList = document.getElementById('offers-list');
+            const newOffer = document.createElement('div');
+            newOffer.className = 'offer';
+            newOffer.dataset.offerId = data.offer_id;
+
+            newOffer.innerHTML = `
+                <p>Executor: ${data.executor_name}</p>
+                <p>Price: $${data.price}</p>
+                {% if user == order.customer %}
+                <button class="accept-offer-btn" data-offer-id="${data.offer_id}">Accept Offer</button>
+                {% endif %}
+            `;
+
+            offersList.appendChild(newOffer);
+
+            // Attach event listeners to the new button
+            attachEventListeners();
+        }
+    };
+
+    // Function to handle offer acceptance
+    function acceptOffer(offerId) {
+        orderSocket.send(JSON.stringify({
+            'type': 'accept_offer',
+            'offer_id': offerId
+        }));
+    }
+
+    // Function to submit new offer
+    function submitOffer(price) {
+        fetch('/api/orders/{{ order.id }}/offer/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                'price': price
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'error') {
+                alert(data.message);
+            }
+        });
+    }
+
+    // Attach event listeners
+    function attachEventListeners() {
+        // Accept offer buttons
+        document.querySelectorAll('.accept-offer-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                acceptOffer(this.dataset.offerId);
+            });
+        });
+
+        // Offer form
+        const offerForm = document.getElementById('offer-form');
+        if (offerForm) {
+            offerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const price = this.elements.price.value;
+                submitOffer(price);
+                this.reset();
+            });
+        }
+    }
+
+    // Helper function to get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', attachEventListeners);
+</script>
+{% endblock %}

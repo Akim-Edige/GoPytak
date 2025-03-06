@@ -5,8 +5,11 @@ from django.views.generic.edit import CreateView
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.http import JsonResponse
-from .forms import OrderForm
-from .models import EquipmentCategory, EquipmentSubCategory, Service
+from .forms import OrderForm, OfferForm
+from .models import EquipmentCategory, EquipmentSubCategory, Service, ChatGroup, Offer
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404, redirect
+
 
 class IndexView(TemplateView):
     template_name = 'orders/index.html'
@@ -62,3 +65,37 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
         form.instance.subcategory = subcategory
         form.instance.service = service
         return super(OrderCreateView, self).form_valid(form)
+
+
+@login_required
+def chat_view(request, chatroom_name='public-chat'):
+    chat_group = get_object_or_404(ChatGroup,group_name=chatroom_name)
+    form = OfferForm()
+    offers = chat_group.chat_offers.all()
+
+    if offers[0].proposer != request.user:
+        button = True
+    else:
+        button = False
+
+    if request.htmx:
+        form = OfferForm(request.POST)
+        if form.is_valid():
+            offer = form.save(commit=False)
+            offer.proposer = request.user
+
+            offer.group = chat_group
+            offer.save()
+            context = {
+                'offer':offer,
+                'user':request.user,
+            }
+            return render(request, 'orders/partials/chat_message_p.html', context)
+
+    context = {
+        'chat_messages':offers,
+        'form':form,
+        'chatroom_name':chatroom_name,
+        'button': button,
+    }
+    return render(request, 'orders/chat.html', context)

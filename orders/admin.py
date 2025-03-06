@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Equipment, Order, Service, EquipmentCategory, EquipmentSubCategory
+from .models import Equipment, Order, Service, EquipmentCategory, EquipmentSubCategory, ChatGroup, Offer
 # Register your models here.
 
 
@@ -68,3 +68,7 @@ class OrderAdmin(admin.ModelAdmin):
     autocomplete_fields = ['customer', 'service']  # Auto-complete fields for FK relationships
     ordering = ['-created_at']  # Sort orders by creation date (most recent first)
     date_hierarchy = 'created_at'  # Add a date hierarchy filter
+
+
+admin.site.register(ChatGroup)
+admin.site.register(Offer)

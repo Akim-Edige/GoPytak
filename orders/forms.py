@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from orders.models import Order, Service, EquipmentSubCategory
+from orders.models import Order, Service, EquipmentSubCategory, Offer
 from users.models import User
 from users.tasks import send_email_verification
 from django.utils.timezone import now
@@ -50,6 +50,15 @@ class OrderForm(forms.ModelForm):
 
     class Meta:
         model = Order
+        fields = ('price', 'description')
+
+
+class OfferForm(forms.ModelForm):
+    price = forms.IntegerField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ваша цена'}))
+    description = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Описание'}))
+
+    class Meta:
+        model = Offer
         fields = ('price', 'description')
 
 

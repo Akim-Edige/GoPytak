@@ -1,0 +1,22 @@
+{% if message.proposer == user %}
+    <li class="flex justify-end mb-4">
+        <div class="offer-message sent clearfix">
+                    <div class="offer-details">
+                        <strong>Your Counter-offer: {{ message.price }} ₽</strong>
+                        <p>{{ message.description }}</p>
+                    </div>
+                    <div class="offer-actions">
+                        <span class="text-muted">Waiting for response...</span>
+                    </div>
+                </div>
+    </li>
+{% else %}
+    <li>
+        <div class="offer-message received clearfix">
+            <div class="offer-details">
+                <strong>Proposed Price: {{ message.price }} ₽</strong>
+                <p>{{ message.description }}</p>
+            </div>
+        </div>
+    </li>
+{% endif %}
