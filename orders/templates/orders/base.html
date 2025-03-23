@@ -231,7 +231,7 @@
                         <a class="dropdown-item" href="#">Личный кабинет</a>
                       </li>
                       <li>
-                        <a class="dropdown-item" href="#">Мои заказы</a>
+                        <a class="dropdown-item" href="{% url 'orders:user_orders' %}">Мои заказы</a>
                       </li>
                       {% if user.is_superuser or user.is_staff %}
                         <li>

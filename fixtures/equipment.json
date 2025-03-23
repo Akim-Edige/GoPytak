@@ -1,0 +1,38 @@
+[
+{
+  "model": "orders.equipment",
+  "pk": "6f53553c-38e9-415e-b6f1-694c553ee463",
+  "fields": {
+    "user": 2,
+    "name": "CAT 320",
+    "description": "",
+    "register_date": "2025-02-02",
+    "serial_number": "A635207",
+    "subcategory": 1
+  }
+},
+{
+  "model": "orders.equipment",
+  "pk": "8ed2fe97-bdb6-4abe-a725-c865d242b6f3",
+  "fields": {
+    "user": 2,
+    "name": "Liebherr LTM  1120",
+    "description": "",
+    "register_date": null,
+    "serial_number": "B794905",
+    "subcategory": 3
+  }
+},
+{
+  "model": "orders.equipment",
+  "pk": "99fc0f02-7de4-4ed7-877a-5c1312e679a4",
+  "fields": {
+    "user": 2,
+    "name": "Vogele Super 1800",
+    "description": "",
+    "register_date": null,
+    "serial_number": "W143982",
+    "subcategory": 2
+  }
+}
+]

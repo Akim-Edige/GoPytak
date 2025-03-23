@@ -62,38 +62,6 @@ class OfferForm(forms.ModelForm):
         fields = ('price', 'description')
 
 
-# class OrderForm(forms.ModelForm):
-#     class Meta:
-#         model = Order
-#         fields = ['customer', 'service', 'subcategory', 'price', 'description']
-#
-#     # Customize fields if needed
-#     customer = forms.ModelChoiceField(
-#         queryset=User.objects.all(),
-#         widget=forms.Select(attrs={'class': 'form-control'})
-#     )
-#
-#     service = forms.ModelChoiceField(
-#         queryset=Service.objects.all(),
-#         widget=forms.Select(attrs={'class': 'form-control'})
-#     )
-#
-#     subcategory = forms.ModelChoiceField(
-#         queryset=EquipmentSubCategory.objects.all(),
-#         widget=forms.Select(attrs={'class': 'form-control'})
-#     )
-#
-#     price = forms.DecimalField(
-#         max_digits=10, decimal_places=2,
-#         widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter price'})
-#     )
-#
-#     description = forms.CharField(
-#         required=False,
-#         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Describe your order'})
-#     )
-
-
 class UserUpdateForm(forms.ModelForm):
     first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control py-4'}))
     last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control py-4'}))

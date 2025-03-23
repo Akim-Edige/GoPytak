@@ -1,0 +1,29 @@
+[
+{
+  "model": "orders.equipmentsubcategory",
+  "pk": 1,
+  "fields": {
+    "name": "Экскаваторы",
+    "description": "",
+    "category": 1
+  }
+},
+{
+  "model": "orders.equipmentsubcategory",
+  "pk": 2,
+  "fields": {
+    "name": "Асфальтоукладчики",
+    "description": "",
+    "category": 2
+  }
+},
+{
+  "model": "orders.equipmentsubcategory",
+  "pk": 3,
+  "fields": {
+    "name": "Подъемники",
+    "description": "",
+    "category": 3
+  }
+}
+]

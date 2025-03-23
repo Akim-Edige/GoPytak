@@ -29,18 +29,16 @@ class ChatroomConsumer(WebsocketConsumer):
         text_data_json = json.loads(text_data)
         price = text_data_json['price']
         description = text_data_json['description']
-        order = get_object_or_404(Order, order_id='6443bb52-4979-47b5-b489-c779c008bf51')
         offer = Offer.objects.create(
             price=price,
             proposer=self.user,
             description=description,
             group=self.chatroom,
-            order_id=order,
         )
 
         event = {
             'type': 'message_handler',
-            'message_id': offer.id,
+            'message_id': offer.offer_id,
         }
 
         async_to_sync(self.channel_layer.group_send)(
@@ -49,7 +47,7 @@ class ChatroomConsumer(WebsocketConsumer):
 
     def message_handler(self, event):
         message_id = event['message_id']
-        message = get_object_or_404(Offer, id=message_id)
+        message = get_object_or_404(Offer, offer_id=message_id)
         html = render_to_string('orders/partials/chat_message_p.html', context={
             'message': message,
             'user': self.user,
@@ -61,7 +59,7 @@ class ChatroomConsumer(WebsocketConsumer):
         event = {
             'type': 'make_buttons_visible',
             'visible': False if message.proposer == self.user else True,
-            'offer_id': message.id if message else None,  # Include the offer ID if available
+            'offer_id': message.offer_id if message else None,  # Include the offer ID if available
         }
         self.make_buttons_visible(event)
 

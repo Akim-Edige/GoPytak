@@ -1,0 +1,23 @@
+[
+{
+  "model": "orders.equipmentcategory",
+  "pk": 1,
+  "fields": {
+    "name": "Строительная техника"
+  }
+},
+{
+  "model": "orders.equipmentcategory",
+  "pk": 2,
+  "fields": {
+    "name": "Дорожная техника"
+  }
+},
+{
+  "model": "orders.equipmentcategory",
+  "pk": 3,
+  "fields": {
+    "name": "Грузоподъемная техника"
+  }
+}
+]

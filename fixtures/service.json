@@ -1,0 +1,38 @@
+[
+{
+  "model": "orders.service",
+  "pk": 1,
+  "fields": {
+    "name": "Земляные работы",
+    "description": "",
+    "subcategory": 1
+  }
+},
+{
+  "model": "orders.service",
+  "pk": 2,
+  "fields": {
+    "name": "котлованы",
+    "description": "",
+    "subcategory": 1
+  }
+},
+{
+  "model": "orders.service",
+  "pk": 3,
+  "fields": {
+    "name": "Укладка асфальта на дорогах и мостах",
+    "description": "",
+    "subcategory": 2
+  }
+},
+{
+  "model": "orders.service",
+  "pk": 4,
+  "fields": {
+    "name": "Монтаж металлоконструкций",
+    "description": "",
+    "subcategory": 3
+  }
+}
+]

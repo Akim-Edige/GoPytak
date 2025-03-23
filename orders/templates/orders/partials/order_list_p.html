@@ -1,0 +1,99 @@
+<!-- orders/partials/orders_list.html -->
+{% if orders %}
+<table class="orders-table">
+  <thead>
+    <tr>
+      <th>№</th>
+      <th>ID</th>
+      <th>Услуга</th>
+      <th>Дата создания</th>
+{#      <th>Срок выполнения</th>#}
+{#      <th>Новые предложения</th>#}
+      <th>Исполнитель назначен</th>
+      <th>Завершен</th>
+{#      <th>Статус</th>#}
+      <th>Действия</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order in orders %}
+    <tr id="order-{{ order.id }}" ws-update>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ order.order_id|truncatechars:5 }}</td>
+      <td>{{ order.service }}</td>
+      <td>{{ order.created_at|date:"d.m.Y" }}</td>
+{#      <td>{{ order.deadline|date:"d.m.Y" }}</td>#}
+{#      <td>#}
+{#        {% if order.new_offers_count > 0 %}#}
+{#        <span class="new-indicator">{{ order.new_offers_count }}</span>#}
+{#        {% else %}#}
+{#        0#}
+{#        {% endif %}#}
+{#      </td>#}
+      <td class="text-center">
+        {% if order.executor_id %}
+        <span class="fas fa-check" title="Да"></span>
+        {% else %}
+        <span class="fas fa-xmark" title="Нет">X</span>
+        {% endif %}
+      </td>
+      <td class="text-center">
+        {% if not order.is_active %}
+        <span class="fas fa-check" title="Да"></span>
+        {% else %}
+        <span class="fa-solid fa-xmark" title="Нет">✕</span>
+        {% endif %}
+      </td>
+{#      <td>#}
+{#        {% if order.status == 'active' and not order.executor_assigned %}#}
+{#        <span class="status-badge badge-active">Активный</span>#}
+{#        {% elif order.status == 'active' and order.executor_assigned %}#}
+{#        <span class="status-badge badge-active">В работе</span>#}
+{#        {% elif order.status == 'completed' %}#}
+{#        <span class="status-badge badge-completed">Завершен</span>#}
+{#        {% elif order.status == 'cancelled' %}#}
+{#        <span class="status-badge badge-cancelled">Отменен</span>#}
+{#        {% elif order.status == 'pending' %}#}
+{#        <span class="status-badge badge-pending">На рассмотрении</span>#}
+{#        {% endif %}#}
+{#      </td>#}
+      <td>
+        <a href="{% url 'orders:order_detail' order.order_id %}" class="btn-view">
+          <i class="fas fa-eye"></i> Просмотр
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="pagination">
+  {% if orders.has_previous %}
+  <button class="pagination-btn"
+          hx-get="{% url 'orders:user_orders' %}?page={{ orders.previous_page_number }}"
+          hx-target="#orders-content">
+    <i class="fas fa-chevron-left"></i>
+  </button>
+  {% endif %}
+
+  <span class="pagination-btn active">{{ orders.number }}</span>
+
+  {% if orders.has_next %}
+  <button class="pagination-btn"
+          hx-get="{% url 'orders:user_orders' %}?page={{ orders.next_page_number }}"
+          hx-target="#orders-content">
+    <i class="fas fa-chevron-right"></i>
+  </button>
+  {% endif %}
+</div>
+
+{% else %}
+<div class="empty-state">
+  <i class="fas fa-clipboard-list"></i>
+  <h3>У вас пока нет заказов</h3>
+  <p>Разместите новый заказ, чтобы начать поиск исполнителя</p>
+  <a href="{% url 'orders:create_order' %}" class="btn-view mt-3">
+    Разместить заказ
+  </a>
+</div>
+{% endif %}

@@ -1,6 +1,10 @@
 <div id="offer-buttons" class="d-flex justify-content-center mt-3 {% if not visible %}d-none{% endif %}" hx-swap-oob="outerHTML">
     <div class="fade-in-up">
-        <button class="btn btn-sm btn-success" hx-post="/accept-offer/{{ offer_id }}">Accept Offer</button>
+        <button class="btn btn-sm btn-success"
+                hx-post="{% url 'orders:accept-offer' offer_id %}"
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+            Accept Offer
+        </button>
         <button class="btn btn-sm btn-outline-secondary"
                 _="on click toggle .d-block on #counter-offer-section">
             Send Counter-offer
