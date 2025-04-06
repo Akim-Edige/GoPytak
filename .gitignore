@@ -6,4 +6,4 @@ dataset
 venv
 .env
 db.sqlite3
-
+.env.docker

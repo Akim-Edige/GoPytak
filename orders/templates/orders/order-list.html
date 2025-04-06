@@ -170,12 +170,13 @@
     background-color: white;
     cursor: pointer;
     transition: all 0.3s;
+    color: #333; /* Default text color for inactive buttons */
   }
   
   .filter-btn.active {
-    background-color: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
+    background-color: var(--primary-color); /* Set active button background to primary color */
+    color: white; /* Active button text color */
+    border-color: var(--primary-color); /* Border color of active button */
   }
   
   .search-box {
@@ -231,28 +232,41 @@
 {% endblock %}
 
 {% block content %}
-<div class="orders-container" hx-ext="ws" ws-connect="/ws/orders/">
+<div class="orders-container">
   <h2 class="section-title">Мои заказы</h2>
   
   <div class="filter-section">
     <div class="filter-group">
-      <button class="filter-btn active" hx-get="{% url 'orders:user_orders' %}" hx-target="#orders-content" hx-swap="innerHTML">
+      <button class="filter-btn {% if not request.GET.status %}active{% endif %}" 
+              hx-get="{% url 'orders:user_orders' %}" 
+              hx-target="#orders-content" 
+              hx-push-url="true"
+              hx-swap="innerHTML">
         Все заказы
       </button>
-      <button class="filter-btn" hx-get="{% url 'orders:user_orders' %}?status=True" hx-target="#orders-content" hx-swap="innerHTML">
+      <button class="filter-btn {% if request.GET.status == 'True' %}active{% endif %}" 
+              hx-get="{% url 'orders:user_orders' %}?status=True" 
+              hx-target="#orders-content" 
+              hx-push-url="true"
+              hx-swap="innerHTML">
         Активные
       </button>
-      <button class="filter-btn" hx-get="{% url 'orders:user_orders' %}?status=False" hx-target="#orders-content" hx-swap="innerHTML">
+      <button class="filter-btn {% if request.GET.status == 'False' %}active{% endif %}" 
+              hx-get="{% url 'orders:user_orders' %}?status=False" 
+              hx-target="#orders-content" 
+              hx-push-url="true"
+              hx-swap="innerHTML">
         Завершенные
       </button>
-{#      <button class="filter-btn" hx-get="{% url 'orders:user_orders' %}?new_offers=true" hx-target="#orders-content" hx-swap="innerHTML">#}
-{#        Новые предложения#}
-{#      </button>#}
     </div>
     
     <div class="search-box">
-      <input type="text" placeholder="Поиск заказа..." hx-get="{% url 'orders:user_orders' %}" 
-             hx-trigger="keyup changed delay:500ms" hx-target="#orders-content" name="search">
+      <input type="text" placeholder="Поиск заказа..." 
+             hx-get="{% url 'orders:user_orders' %}" 
+             hx-trigger="keyup changed delay:500ms" 
+             hx-target="#orders-content"
+             hx-push-url="true"
+             name="search">
       <i class="fas fa-search"></i>
     </div>
   </div>
@@ -298,6 +312,18 @@
         title: 'Новое предложение на ваш заказ!'
       });
     }
+  });
+
+  // Add event listeners to filter buttons to toggle active state
+  document.querySelectorAll('.filter-btn').forEach(function(button) {
+    button.addEventListener('click', function() {
+      // Remove 'active' class from all filter buttons
+      document.querySelectorAll('.filter-btn').forEach(function(btn) {
+        btn.classList.remove('active');
+      });
+      // Add 'active' class to the clicked button
+      this.classList.add('active');
+    });
   });
 </script>
 {% endblock %}

@@ -19,6 +19,7 @@ class IndexView(TemplateView):
     title = 'GoPytak'
 
 
+
 class OrderDetailView(LoginRequiredMixin, DetailView):
     model = Order
     template_name = 'orders/order_details.html'
@@ -59,8 +60,9 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
         chat_list = []
         for chat in chats:
             # Get the latest offer for each chat
-            last_offer = Offer.objects.filter(group=chat).order_by('-created_at').first()
+            last_offer = Offer.objects.filter(group=chat).order_by('-created').first()
 
+            # if last_offer and last_offer.proposer != order.customer:
             if last_offer:
                 # Get the executor (proposer of the offer)
                 executor = last_offer.proposer
@@ -69,11 +71,13 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
                     'id': chat.id,
                     'executor': executor,
                     'last_offer': last_offer,
+                    'group_name': chat.group_name,
+                    'created_at': last_offer.created,
                 }
 
                 chat_list.append(chat_data)
 
-        context['chats'] = chat_list
+        context['chats'] = sorted(chat_list, key=lambda x: x['created_at'], reverse=True)
 
         # If an executor is assigned, get their details
         if order.executor_id:

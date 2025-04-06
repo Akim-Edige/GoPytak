@@ -270,17 +270,7 @@
                     <div class="chat-list">
                         {% if chats %}
                             {% for chat in chats %}
-                            <div class="chat-item {% if chat.id == active_chat_id %}active{% endif %}"
-                                 hx-get="{% url 'orders:chat' order.order_id chat.id %}"
-                                 hx-target="#chat-detail-container"
-                                 hx-swap="innerHTML">
-                                <div class="chat-item-header">
-                                    <span class="chat-item-price">{{ chat.last_offer.price }} ₽</span>
-                                    <span class="chat-item-date">{{ chat.last_offer.created_at|date:"d.m.Y" }}</span>
-                                </div>
-                                <div class="chat-item-executor">{{ chat.executor.username }}</div>
-                                <div class="chat-item-preview">{{ chat.last_offer.description|truncatechars:50 }}</div>
-                            </div>
+                                {% include 'orders/partials/order_details_p.html' %}
                             {% endfor %}
                         {% else %}
                             <div class="text-center p-4 text-muted">
